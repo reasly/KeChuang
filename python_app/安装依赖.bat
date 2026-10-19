@@ -5,12 +5,14 @@ cd /d "%~dp0"
 
 set "RUNTIME=%~dp0runtime"
 set "PY=%RUNTIME%\python.exe"
+set "VENV=%~dp0.venv"
+set "VENV_PY=%VENV%\Scripts\python.exe"
 set "INSTALLER=%TEMP%\kechuang-python-setup.exe"
 set "PY_VERSION=3.12.10"
 set "PY_URL=https://www.python.org/ftp/python/%PY_VERSION%/python-%PY_VERSION%-amd64.exe"
 
-echo [1/2] 检查本地 Python ...
-if exist "%PY%" goto :install_deps
+echo [1/3] 检查本地 Python ...
+if exist "%PY%" goto :install_runtime_deps
 
 echo 未找到 runtime\python.exe，正在安装便携 Python 到本目录（不改系统 PATH）...
 echo 下载：%PY_URL%
@@ -22,7 +24,7 @@ if errorlevel 1 (
   exit /b 1
 )
 
-echo 正在解压安装到：
+echo 正在安装到：
 echo   %RUNTIME%
 "%INSTALLER%" /quiet InstallAllUsers=0 PrependPath=0 Include_launcher=0 Include_test=0 Include_doc=0 Include_pip=1 SimpleInstall=1 TargetDir="%RUNTIME%"
 set "INSTALL_EXIT=%ERRORLEVEL%"
@@ -36,8 +38,8 @@ if not exist "%PY%" (
 
 echo 本地 Python 已就绪：%PY%
 
-:install_deps
-echo [2/2] 安装项目依赖 ...
+:install_runtime_deps
+echo [2/3] 安装依赖到 runtime ...
 "%PY%" -m pip install --upgrade pip
 if errorlevel 1 (
   echo pip 升级失败。
@@ -46,12 +48,37 @@ if errorlevel 1 (
 )
 "%PY%" -m pip install -r "%~dp0requirements.txt"
 if errorlevel 1 (
-  echo 依赖安装失败。
+  echo runtime 依赖安装失败。
+  pause
+  exit /b 1
+)
+
+echo [3/3] 用 runtime 重建 PyCharm 用的 .venv ...
+if exist "%~dp0venv" (
+  echo 删除旧的 venv\ ...
+  rmdir /s /q "%~dp0venv"
+)
+if exist "%VENV%" (
+  echo 删除旧的 .venv\ ...
+  rmdir /s /q "%VENV%"
+)
+"%PY%" -m venv "%VENV%"
+if errorlevel 1 (
+  echo 创建 .venv 失败。
+  pause
+  exit /b 1
+)
+"%VENV_PY%" -m pip install --upgrade pip
+"%VENV_PY%" -m pip install -r "%~dp0requirements.txt"
+if errorlevel 1 (
+  echo .venv 依赖安装失败。
   pause
   exit /b 1
 )
 
 echo.
-echo 完成。以后请双击“启动程序.bat”，将使用本地 runtime\python.exe。
+echo 完成。
+echo - 双击启动：启动程序.bat  -^> runtime\python.exe
+echo - PyCharm：选 .venv\Scripts\python.exe（基于本地 runtime）
 pause
 exit /b 0

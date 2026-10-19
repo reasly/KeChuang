@@ -6,16 +6,17 @@
 
 推荐（不依赖系统 Python）：
 
-1. 双击 `安装依赖.bat`：会把便携 Python 装到本目录 `runtime\`，并安装依赖。
-2. 以后双击 `启动程序.bat` 启动界面（只用 `runtime\python.exe`）。
+1. 双击 `安装依赖.bat`：安装便携 `runtime\`，并基于它重建可用的 `.venv`。
+2. 以后双击 `启动程序.bat` 启动界面（使用 `runtime\python.exe`）。
 
 用 PyCharm 时：
 
 1. 打开整个 `python_app` 文件夹。
-2. 解释器选 `python_app/runtime/python.exe`（先运行过一次安装依赖）。
+2. 解释器选项目下的 `.venv`（`python_app/.venv/Scripts/python.exe`）。  
+   它由本地 `runtime` 创建，PyCharm 一般会自动识别。
 3. 运行根目录中的 `app.py`。
 
-不要选用已损坏的 `.venv` / `venv`；启动脚本也不会再调用系统 PATH 里的 `python`。
+不要再使用旧的 `venv\`；若 `.venv` 异常，重新运行一次 `安装依赖.bat` 即可重建。
 
 ## 比赛现场先这样验证
 
