@@ -1,0 +1,30 @@
+# Python virtual environments (machine-specific, broken when copied)
+.venv/
+venv/
+
+# Python cache / build
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local runtime data
+*.log
+python_app/data/
+python_app/**/store.json
+
+# Local zip backups
+*.zip
