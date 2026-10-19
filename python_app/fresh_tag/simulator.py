@@ -49,8 +49,15 @@ class TemperatureSimulator:
     def _loop(self) -> None:
         sequence = 0
         started = time.monotonic()
+        last_stage: Optional[float] = None
         while not self._stop.is_set():
             elapsed = time.monotonic() - started
+            stage = demo_temperature(elapsed)
+            if last_stage is None:
+                last_stage = stage
+            elif stage > last_stage:
+                last_stage = stage
+                self.output.put(("demo_stage", stage))
             temperature = demo_reading(elapsed, random.uniform(-DEMO_NOISE_C, DEMO_NOISE_C))
             self.output.put(("demo", f"BOX01,{temperature:.2f},{sequence}"))
             sequence += 1

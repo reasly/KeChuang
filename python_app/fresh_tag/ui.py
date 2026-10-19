@@ -503,6 +503,9 @@ class FreshTagApp:
                 elif kind == "demo":
                     if self.demo_mode:
                         self._handle_telemetry(payload, simulated=True)
+                elif kind == "demo_stage":
+                    if self.demo_mode:
+                        self._announce_demo_temperature(payload)
                 elif kind == "qr":
                     self._handle_qr(payload)
                 elif kind == "log":
@@ -514,6 +517,12 @@ class FreshTagApp:
         except queue.Empty:
             pass
         self.root.after(100, self._process_events)
+
+    def _announce_demo_temperature(self, temperature_c: float) -> None:
+        degrees = int(round(float(temperature_c)))
+        notice = f"注意，演示温度升高为{degrees}度"
+        self._log(f"语音提醒：{notice}", "warn")
+        self.voice.speak(f"{notice}。")
 
     def _handle_telemetry(self, line: str, simulated: bool = False) -> None:
         source = "演示数据" if simulated else "收到"
