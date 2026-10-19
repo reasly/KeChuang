@@ -1,6 +1,9 @@
-# Python virtual environments (machine-specific, broken when copied)
+# Python virtual environments / portable runtime (machine-local)
 .venv/
 venv/
+python_app/runtime/
+python_app/.venv/
+python_app/venv/
 
 # Python cache / build
 __pycache__/

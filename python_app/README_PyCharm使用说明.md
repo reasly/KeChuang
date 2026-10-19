@@ -4,12 +4,18 @@
 
 ## 第一次运行
 
-1. 用 PyCharm 打开整个 `python_app` 文件夹。
-2. 选择 Python 3.10 或更新版本的解释器。
-3. 在 PyCharm 终端运行：`python -m pip install -r requirements.txt`。
-4. 运行根目录中的 `app.py`。
+推荐（不依赖系统 Python）：
 
-也可以先双击“安装依赖.bat”，以后双击“启动程序.bat”。
+1. 双击 `安装依赖.bat`：会把便携 Python 装到本目录 `runtime\`，并安装依赖。
+2. 以后双击 `启动程序.bat` 启动界面（只用 `runtime\python.exe`）。
+
+用 PyCharm 时：
+
+1. 打开整个 `python_app` 文件夹。
+2. 解释器选 `python_app/runtime/python.exe`（先运行过一次安装依赖）。
+3. 运行根目录中的 `app.py`。
+
+不要选用已损坏的 `.venv` / `venv`；启动脚本也不会再调用系统 PATH 里的 `python`。
 
 ## 比赛现场先这样验证
 
